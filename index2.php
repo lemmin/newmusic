@@ -60,11 +60,26 @@ class NewMusic {
 	}
 
 	private function findSongYTID($artist, $title) {
-		$q = urlencode($this->cleanURL($artist . ' ' . $title));
+		$artist = $this->cleanURL($artist);
+		$title = $this->cleanURL($title);
+		$q = urlencode($artist . '+' . $title);
 		$json = file_get_contents(YOUTUBE_SEARCH_URL . $q);
 		$results = json_decode($json);
-
-		return $results->items[0]->id->videoId;
+		foreach ($results->items as $i => $result) {
+			$tytitle = $this->cleanURL($result->snippet->title);
+			echo $tytitle . '(' . $artist . ')(' . $title . ')' . "\r\n";
+			// TODO: Match these strings somehow.wtf.
+			if (stripos($tytitle, $artist) !== FALSE) {
+	die('wtf');
+					if (stripos($tytitle, $title) !== FALSE) {
+						die('wtf2');
+						return $results->items[$i]->id->videoId;
+					}
+				}
+		}
+		echo 'Cannot find ' . $artist . ' - ' . $title . ' on Youtube.' . "\r\n";
+		die();
+		return '';
 	}
 
 	private function getSites() {

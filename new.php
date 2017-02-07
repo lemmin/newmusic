@@ -9,7 +9,7 @@ $n = 10;
 if (isset($_GET['max'])) {
 	$n = (int)$_GET['max'];
 }
-$q = 'SELECT * FROM songs ORDER BY date_added DESC, song_id LIMIT ' . $n;
+$q = 'SELECT * FROM songs WHERE youtube_id IS NOT NULL AND youtube_id != '' ORDER BY date_added DESC, song_id LIMIT ' . $n;
 
 $db = new mysqli(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 $result = $db->query($q) or die($db->error . ': ' . $q);
