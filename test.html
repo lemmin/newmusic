@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Test</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script>
+	window.onload = function () {
+		$.get('new.php?max=15', function (data) {
+			var link = 'http://jumpjams.com/#v/';
+			for (var i=0; i<data.length; i++) {
+				link += data[i].youtube_id + ',';
+			}
+			document.body.innerHTML = '<a href="' + link + '">New Music!</a>';
+		});
+	}
+	</script>
+</head>
+<body>
+</body>
+</html>
