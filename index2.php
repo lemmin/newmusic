@@ -65,20 +65,17 @@ class NewMusic {
 		$q = urlencode($artist . '+' . $title);
 		$json = file_get_contents(YOUTUBE_SEARCH_URL . $q);
 		$results = json_decode($json);
+
+		$artist = $this->cleanUltra($artist);
+		$title = $this->cleanUltra($title);
 		foreach ($results->items as $i => $result) {
-			$tytitle = $this->cleanURL($result->snippet->title);
-			echo $tytitle . '(' . $artist . ')(' . $title . ')' . "\r\n";
-			// TODO: Match these strings somehow.wtf.
-			if (stripos($tytitle, $artist) !== FALSE) {
-	die('wtf');
-					if (stripos($tytitle, $title) !== FALSE) {
-						die('wtf2');
-						return $results->items[$i]->id->videoId;
-					}
+			$tytitle = $this->cleanUltra($this->cleanURL($result->snippet->title));
+			if (stripos($tytitle, $artist) !== FALSE &&
+				stripos($tytitle, $title) !== FALSE) {
+					return $results->items[$i]->id->videoId;
 				}
 		}
 		echo 'Cannot find ' . $artist . ' - ' . $title . ' on Youtube.' . "\r\n";
-		die();
 		return '';
 	}
 
@@ -128,6 +125,10 @@ class NewMusic {
 
 		$s = preg_replace($pats, $reps, $s);
 		return preg_replace('/[^a-zA-Z0-9\s]/', '', $s);
+	}
+
+	private function cleanUltra($s) {
+		return strtolower(preg_replace('/[^a-zA-Z0-9]/', '', $s));
 	}
 
 	private function query($s) {
